@@ -5,3 +5,12 @@ export interface Post {
     username: string;
     created_at: string;
 }
+
+export interface User {
+    id: number;
+    email: string;
+    username: string;
+    description?: string;
+    is_admin: boolean;
+    created_at: string;
+}
