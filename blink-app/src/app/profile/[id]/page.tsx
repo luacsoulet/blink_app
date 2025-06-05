@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation"
 import { getUser, getUserPosts } from "@/utils/apiFunctions";
 import { User, PostType } from "@/utils/types";
-import { Post } from "@/components/Post";
 import { useAuthStore } from "@/store/AuthStore";
 import { UserBanner } from "@/components/UserBanner";
-import dayjs from "dayjs";
+import { PostsGallery } from "@/components/PostsGallery";
+import { PostCreator } from "@/components/PostCreator";
 
 export default function ProfilePage() {
     const { id } = useParams();
@@ -36,33 +36,9 @@ export default function ProfilePage() {
             {user && <UserBanner user={user} authStore={authStore} />}
             <div className="flex flex-col w-1/3 gap-4">
                 {user?.id === authStore.user?.id && (
-                    <form className="flex items-center gap-4 bg-quaternary border-2 border-quinary text-secondary p-2 rounded-lg w-full" onSubmit={handlePost}>
-                        <textarea
-                            placeholder="Type your post here..."
-                            className="text-secondary p-2 rounded-lg w-full outline-none focus:border-action resize-none min-h-[40px] max-h-[200px] overflow-y-auto"
-                            value={newPost}
-                            onChange={(e) => setNewPost(e.target.value)}
-                            rows={1}
-                            onInput={(e) => {
-                                const target = e.target as HTMLTextAreaElement;
-                                target.style.height = 'auto';
-                                target.style.height = target.scrollHeight + 'px';
-                            }}
-                            required
-                        />
-                        <button className="w-fit h-fit bg-action text-primary px-4 py-2 rounded-lg hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100" type="submit" disabled={newPost.length === 0}>
-                            Post
-                        </button>
-                    </form>
+                    <PostCreator handlePost={handlePost} newPost={newPost} setNewPost={setNewPost} />
                 )}
-                <div className="flex flex-col gap-4">
-                    {posts.map((post: PostType) => (
-                        <Post key={post.id} post={post} modify={user?.id === authStore.user?.id} />
-                    ))}
-                    {posts.length === 0 && (
-                        <p className="text-secondary/50 text-center text-lg">No posts yet</p>
-                    )}
-                </div>
+                {posts && user && <PostsGallery posts={posts} user={user} authStore={authStore} />}
             </div>
         </div>
     )
