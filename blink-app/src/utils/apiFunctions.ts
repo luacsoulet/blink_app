@@ -44,3 +44,40 @@ export const register = async (username: string, email: string, password: string
         return null;
     }
 }
+
+export const verifyToken = async (token: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/auth/verify`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.status === 200;
+    } catch (error) {
+        console.error('Error verifying token:', error);
+        return false;
+    }
+}
+
+export const getUser = async (id: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/users/${id}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        return null;
+    }
+}
+
+export const getUserPosts = async (id: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/users/${id}/posts`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching user posts:', error);
+        return null;
+    }
+}
