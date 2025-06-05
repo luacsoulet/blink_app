@@ -8,7 +8,7 @@ export const NavBar = () => {
 
     const { user, isAuthenticated, logout } = useAuthStore();
     return (
-        <div className="flex justify-between items-center p-5">
+        <div className="navbar">
             <div>
                 <Link href="/">
                     <h1 className="navbar__logo font-bold">Blink</h1>
