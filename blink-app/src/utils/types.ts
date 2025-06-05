@@ -14,3 +14,8 @@ export interface User {
     is_admin: boolean;
     created_at: string;
 }
+
+export interface AuthStoreType {
+    user: User | null;
+    token: string | null;
+}
