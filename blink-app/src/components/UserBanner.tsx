@@ -1,15 +1,22 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/AuthStore";
-import { deleteUser } from "@/utils/apiFunctions";
+import { deleteUser, modifyUser } from "@/utils/apiFunctions";
 import { AuthStoreType, User } from "@/utils/types"
 import dayjs from "dayjs"
 import { useState } from "react";
 import { DeleteModal } from "@/components/DeleteModal";
+import { ModifyModal } from "@/components/ModifyModal";
 
-export const UserBanner = ({ user, authStore }: { user: User, authStore: AuthStoreType }) => {
+export const UserBanner = ({ user, authStore, setUser }: { user: User, authStore: AuthStoreType, setUser: (user: User) => void }) => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showModifyModal, setShowModifyModal] = useState(false);
+    const [isModifying, setIsModifying] = useState(false);
+    const [modifiedUsername, setModifiedUsername] = useState(user.username);
+    const [modifiedEmail, setModifiedEmail] = useState(user.email);
+    const [modifiedDescription, setModifiedDescription] = useState(user.description);
+
     const { token } = useAuthStore();
     const router = useRouter();
 
@@ -27,6 +34,21 @@ export const UserBanner = ({ user, authStore }: { user: User, authStore: AuthSto
         setShowDeleteModal(false);
     }
 
+    const handleModifyUser = async () => {
+        if (!user?.id || !token) {
+            console.error('Missing user ID or token');
+            return;
+        }
+        setIsModifying(true);
+        const success = await modifyUser(user.id.toString(), modifiedUsername, modifiedEmail, modifiedDescription || "", token);
+        if (success) {
+            setUser({ ...user, username: success.username, email: success.email, description: success.description || "" });
+        }
+
+        setIsModifying(false);
+        setShowModifyModal(false);
+    }
+
     return (
         <>
             <div className="flex flex-col w-1/2 min-h-[200px] gap-4 border-2 border-quinary rounded-2xl overflow-hidden">
@@ -42,7 +64,10 @@ export const UserBanner = ({ user, authStore }: { user: User, authStore: AuthSto
                     </div>
                     <div className="flex flex-col items-center p-5 gap-2">
                         {user?.id === authStore.user?.id && (
-                            <button className="w-fit h-fit bg-action text-primary px-4 py-2 rounded-lg hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300">
+                            <button
+                                className="w-fit h-fit bg-action text-primary px-4 py-2 rounded-lg hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300"
+                                onClick={() => setShowModifyModal(true)}
+                            >
                                 Edit Info
                             </button>
                         )}
@@ -65,6 +90,20 @@ export const UserBanner = ({ user, authStore }: { user: User, authStore: AuthSto
                     isDeleting={isDeleting}
                     onClose={() => setShowDeleteModal(false)}
                     onDelete={handleDeleteUser}
+                />
+            )}
+            {showModifyModal && (
+                <ModifyModal
+                    type="user"
+                    isModifying={isModifying}
+                    username={modifiedUsername}
+                    email={modifiedEmail}
+                    description={modifiedDescription}
+                    setUsername={setModifiedUsername}
+                    setEmail={setModifiedEmail}
+                    setDescription={setModifiedDescription}
+                    onClose={() => setShowModifyModal(false)}
+                    onModify={handleModifyUser}
                 />
             )}
         </>
