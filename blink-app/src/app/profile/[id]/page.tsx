@@ -38,28 +38,23 @@ export default function ProfilePage() {
         fetchUser();
     }, [id]);
 
-    const handlePost = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log(newPost);
-    }
-
     if (!user && !isLoading) {
         return <div className="flex items-center justify-center h-screen">User not found</div>;
     }
 
     return (
-        <div className="flex flex-col items-center h-screen pt-60 gap-10">
+        <div className="flex flex-col items-center min-h-screen py-40 gap-10">
             {isLoading ? <UserBannerSkeleton /> : user && <UserBanner user={user} authStore={authStore} />}
             <div className="flex flex-col w-1/3 gap-4">
                 {isLoading ? (
                     user?.id === authStore.user?.id && <PostCreatorSkeleton />
                 ) : (
-                    user?.id === authStore.user?.id && <PostCreator handlePost={handlePost} newPost={newPost} setNewPost={setNewPost} />
+                    user?.id === authStore.user?.id && <PostCreator newPost={newPost} setNewPost={setNewPost} setPosts={setPosts} posts={posts} />
                 )}
                 {isLoading ? (
                     <PostsGallerySkeleton />
                 ) : (
-                    <PostsGallery posts={posts} user={user!} authStore={authStore} />
+                    <PostsGallery posts={posts} user={user!} authStore={authStore} setPosts={setPosts} />
                 )}
             </div>
         </div>

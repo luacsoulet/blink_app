@@ -29,10 +29,10 @@ export const UserBanner = ({ user, authStore }: { user: User, authStore: AuthSto
 
     return (
         <>
-            <div className="flex flex-col w-1/2 gap-4 border-2 border-quinary rounded-2xl overflow-hidden">
-                <div className="relative">
-                    <div className="bg-secondary/70 w-full h-30"></div>
-                    <span className="absolute top-5 left-5 bg-secondary w-30 h-30 rounded-lg"></span>
+            <div className="flex flex-col w-1/2 min-h-[200px] gap-4 border-2 border-quinary rounded-2xl overflow-hidden">
+                <div className="relative h-[120px]">
+                    <div className="bg-secondary/70 w-full h-full"></div>
+                    <span className="absolute top-5 left-5 bg-secondary w-[120px] h-[120px] rounded-lg"></span>
                 </div>
                 <div className="flex flex-row justify-between">
                     <div className="flex flex-col gap-2 p-5">
