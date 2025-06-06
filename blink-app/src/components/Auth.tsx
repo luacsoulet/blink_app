@@ -14,6 +14,11 @@ export const Auth = () => {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
     const { login: loginUser, isAuthenticated } = useAuthStore();
     const router = useRouter();
 
@@ -26,18 +31,30 @@ export const Auth = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
+
+        if (!validateEmail(email)) {
+            setError("Veuillez entrer une adresse email valide");
+            return;
+        }
+
         setIsLoading(true);
 
         try {
             let response = isLogin
                 ? await login(email, password)
-                : await register(username, password, email);
+                : await register(username, email, password);
+
+            if (!response || !response.token || !response.user) {
+                console.error("Invalid response format:", response);
+                setError("La réponse du serveur n'est pas dans le bon format");
+                return;
+            }
+
             loginUser(response);
             router.push("/");
         } catch (error) {
             console.error("Error logging in:", error);
             setError("Une erreur est survenue. Veuillez réessayer.");
-            return;
         } finally {
             setIsLoading(false);
         }
@@ -52,9 +69,12 @@ export const Auth = () => {
                 )}
                 <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-secondary text-primary p-2 rounded-md w-full" />
                 <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-secondary text-primary p-2 rounded-md w-full" />
+                {error && (
+                    <div className="text-red-500 text-sm w-full text-center">{error}</div>
+                )}
                 <button type="submit" disabled={isLoading} className="bg-action text-primary p-2 w-2/3 rounded-md hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300">{isLogin ? "Login" : "Register"}</button>
             </form>
-            <button onClick={() => setIsLogin(!isLogin)} className="text-secondary p-2 btn-ghost rounded-md w-full hover:bg-secondary/80 hover:text-primary hover:scale-105 active:scale-95 transition-all duration-300">{isLogin ? "I already have an account" : "I don't have an account"}</button>
+            <button onClick={() => setIsLogin(!isLogin)} className="text-secondary p-2 btn-ghost rounded-md w-full hover:bg-secondary/80 hover:text-primary hover:scale-105 active:scale-95 transition-all duration-300">{isLogin ? "I don't have an account" : "I already have an account"}</button>
         </div>
     )
 }
