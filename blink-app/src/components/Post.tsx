@@ -63,7 +63,7 @@ export const Post = ({ post, modify, setPosts, posts }: { post: PostType, modify
                         <button className="w-fit h-fit bg-action text-primary px-2 py-2 rounded-lg hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer" onClick={() => setShowModifyModal(true)}>
                             <Pencil className="w-4 h-4" />
                         </button>
-                        {user?.is_admin && (
+                        {user?.is_admin || user?.id === post.user_id && (
                             <button
                                 className="w-fit h-fit bg-red-500 text-primary px-2 py-2 rounded-lg hover:bg-red-500/80 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
                                 onClick={() => setShowDeleteModal(true)}
