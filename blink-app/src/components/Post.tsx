@@ -3,14 +3,18 @@ import { CircleUserRound, Pencil, Trash } from 'lucide-react';
 import { useState } from 'react';
 import { PostType } from "@/utils/types";
 import { useAuthStore } from '@/store/AuthStore';
-import { deletePost } from '@/utils/apiFunctions';
+import { deletePost, modifyPost } from '@/utils/apiFunctions';
 import { DeleteModal } from './DeleteModal';
+import { ModifyModal } from './ModifyModal';
 import dayjs from "dayjs";
 
 export const Post = ({ post, modify, setPosts, posts }: { post: PostType, modify: boolean, setPosts: (posts: PostType[]) => void, posts: PostType[] }) => {
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [showModifyModal, setShowModifyModal] = useState(false);
+    const [isModifying, setIsModifying] = useState(false);
+    const [modifiedContent, setModifiedContent] = useState(post.content);
 
     const { user, token } = useAuthStore();
 
@@ -25,6 +29,22 @@ export const Post = ({ post, modify, setPosts, posts }: { post: PostType, modify
         if (success) {
             setPosts(posts.filter(p => p.id !== post.id));
         }
+        setIsDeleting(false);
+        setShowDeleteModal(false);
+    };
+
+    const handleModifyPost = async () => {
+        if (!token) return;
+        setIsModifying(true);
+        const success = await modifyPost(post.id.toString(), modifiedContent, token);
+        if (success) {
+            const updatedPosts = posts.map(p =>
+                p.id === post.id ? { ...p, content: success.content } : p
+            );
+            setPosts(updatedPosts);
+        }
+        setIsModifying(false);
+        setShowModifyModal(false);
     };
 
 
@@ -40,7 +60,7 @@ export const Post = ({ post, modify, setPosts, posts }: { post: PostType, modify
                 </div>
                 {modify && (
                     <div className="flex items-center gap-2">
-                        <button className="w-fit h-fit bg-action text-primary px-2 py-2 rounded-lg hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
+                        <button className="w-fit h-fit bg-action text-primary px-2 py-2 rounded-lg hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer" onClick={() => setShowModifyModal(true)}>
                             <Pencil className="w-4 h-4" />
                         </button>
                         {user?.is_admin && (
@@ -61,6 +81,19 @@ export const Post = ({ post, modify, setPosts, posts }: { post: PostType, modify
                     isDeleting={isDeleting}
                     onClose={() => setShowDeleteModal(false)}
                     onDelete={handleDeletePost}
+                />
+            )}
+            {showModifyModal && (
+                <ModifyModal
+                    type="post"
+                    isModifying={isModifying}
+                    content={modifiedContent}
+                    setContent={setModifiedContent}
+                    setUsername={(username: string) => { }}
+                    setEmail={(email: string) => { }}
+                    setDescription={(description: string) => { }}
+                    onClose={() => setShowModifyModal(false)}
+                    onModify={handleModifyPost}
                 />
             )}
         </div>
