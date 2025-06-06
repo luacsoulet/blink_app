@@ -23,11 +23,17 @@ export default function ProfilePage() {
     useEffect(() => {
         const fetchUser = async () => {
             setIsLoading(true);
-            const user = await getUser(id as string);
-            setUser(user);
-            const posts = await getUserPosts(id as string);
-            setPosts(posts);
-            setIsLoading(false);
+            try {
+                const userData = await getUser(id as string);
+                setUser(userData);
+                const userPosts = await getUserPosts(id as string);
+                setPosts(userPosts || []);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                setPosts([]);
+            } finally {
+                setIsLoading(false);
+            }
         }
         fetchUser();
     }, [id]);
@@ -35,6 +41,10 @@ export default function ProfilePage() {
     const handlePost = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(newPost);
+    }
+
+    if (!user && !isLoading) {
+        return <div className="flex items-center justify-center h-screen">User not found</div>;
     }
 
     return (
@@ -49,7 +59,7 @@ export default function ProfilePage() {
                 {isLoading ? (
                     <PostsGallerySkeleton />
                 ) : (
-                    posts && user && <PostsGallery posts={posts} user={user} authStore={authStore} />
+                    <PostsGallery posts={posts} user={user!} authStore={authStore} />
                 )}
             </div>
         </div>
