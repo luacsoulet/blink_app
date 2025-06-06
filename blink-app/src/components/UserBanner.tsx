@@ -14,13 +14,18 @@ export const UserBanner = ({ user, authStore }: { user: User, authStore: AuthSto
                     <p>{user?.description || "No description"}</p>
                     <p>{dayjs(user?.created_at).format("DD/MM/YYYY") || "No date"}</p>
                 </div>
-                {user?.id === authStore.user?.id && (
-                    <div className="flex items-center p-5">
+                <div className="flex flex-col items-center p-5 gap-2">
+                    {user?.id === authStore.user?.id && (
                         <button className="w-fit h-fit bg-action text-primary px-4 py-2 rounded-lg hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300">
                             Edit Info
                         </button>
-                    </div>
-                )}
+                    )}
+                    {authStore.user?.is_admin && (
+                        <button className="w-fit h-fit bg-red-500 text-primary px-4 py-2 rounded-lg hover:bg-red-500/80 hover:scale-105 active:scale-95 transition-all duration-300">
+                            Delete User
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     )

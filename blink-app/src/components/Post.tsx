@@ -1,8 +1,11 @@
-import { CircleUserRound, Pencil } from 'lucide-react';
+import { CircleUserRound, Pencil, Trash } from 'lucide-react';
 import { PostType } from "@/utils/types";
+import { useAuthStore } from '@/store/AuthStore';
 import dayjs from "dayjs";
 
 export const Post = ({ post, modify }: { post: PostType, modify: boolean }) => {
+
+    const { user } = useAuthStore();
 
     const formatDate = (dateString: string) => {
         return dayjs(dateString).format('DD/MM/YYYY');
@@ -24,6 +27,11 @@ export const Post = ({ post, modify }: { post: PostType, modify: boolean }) => {
                         <button className="w-fit h-fit bg-action text-primary px-2 py-2 rounded-lg hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
                             <Pencil className="w-4 h-4" />
                         </button>
+                        {user?.is_admin && (
+                            <button className="w-fit h-fit bg-red-500 text-primary px-2 py-2 rounded-lg hover:bg-red-500/80 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
+                                <Trash className="w-4 h-4" />
+                            </button>
+                        )}
                     </div>
                 )}
             </div>
