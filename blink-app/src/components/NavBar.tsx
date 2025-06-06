@@ -18,7 +18,7 @@ export const NavBar = () => {
                 {
                     isAuthenticated ? (
                         <div className="flex items-center gap-4">
-                            <Link href="/profile" className="navbar__title user">
+                            <Link href={`/profile/${user?.id}`} className="navbar__title user">
                                 <span>{user?.username}</span>
                                 <CircleUserRound />
                             </Link>
