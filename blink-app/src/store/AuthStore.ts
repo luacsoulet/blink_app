@@ -25,10 +25,12 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             isAuthenticated: false,
             login: (response: LoginResponse) => {
+                if (!response?.user || !response?.token) return;
                 const normalizedUser = {
                     ...response.user,
-                    is_admin: Boolean(response.user.is_admin)
+                    is_admin: Boolean(response?.user?.is_admin ?? false)
                 };
+                console.log("Normalized user:", normalizedUser);
                 set({
                     user: normalizedUser,
                     token: response.token,
