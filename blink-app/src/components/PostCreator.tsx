@@ -1,4 +1,39 @@
-export const PostCreator = ({ handlePost, newPost, setNewPost }: { handlePost: (e: React.FormEvent<HTMLFormElement>) => void, newPost: string, setNewPost: (value: string) => void }) => {
+import { createPost } from "@/utils/apiFunctions";
+import { useAuthStore } from "@/store/AuthStore";
+import { PostType } from "@/utils/types";
+
+export const PostCreator = ({
+    newPost,
+    setNewPost,
+    setPosts,
+    posts
+}: {
+    newPost: string,
+    setNewPost: (value: string) => void,
+    setPosts: (posts: PostType[]) => void,
+    posts: PostType[]
+}) => {
+    const { token, user } = useAuthStore();
+
+    const handlePost = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!token || !user) return;
+
+        const response = await createPost(newPost, token);
+        if (response) {
+            const newPostData: PostType = {
+                id: response.id,
+                user_id: user.id,
+                content: response.content,
+                username: user.username,
+                created_at: new Date().toISOString()
+            };
+
+            setPosts([newPostData, ...posts]);
+            setNewPost("");
+        }
+    }
+
     return (
         <form className="flex items-center gap-4 bg-quaternary border-2 border-quinary text-secondary p-2 rounded-lg w-full" onSubmit={handlePost}>
             <textarea

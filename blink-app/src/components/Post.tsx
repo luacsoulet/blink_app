@@ -1,14 +1,30 @@
+"use client"
 import { CircleUserRound, Pencil, Trash } from 'lucide-react';
+import { useState } from 'react';
 import { PostType } from "@/utils/types";
 import { useAuthStore } from '@/store/AuthStore';
+import { deletePost } from '@/utils/apiFunctions';
+import { DeleteModal } from './DeleteModal';
 import dayjs from "dayjs";
 
-export const Post = ({ post, modify }: { post: PostType, modify: boolean }) => {
+export const Post = ({ post, modify, setPosts, posts }: { post: PostType, modify: boolean, setPosts: (posts: PostType[]) => void, posts: PostType[] }) => {
 
-    const { user } = useAuthStore();
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const { user, token } = useAuthStore();
 
     const formatDate = (dateString: string) => {
         return dayjs(dateString).format('DD/MM/YYYY');
+    };
+
+    const handleDeletePost = async () => {
+        if (!token) return;
+        setIsDeleting(true);
+        const success = await deletePost(post.id.toString(), token);
+        if (success) {
+            setPosts(posts.filter(p => p.id !== post.id));
+        }
     };
 
 
@@ -28,7 +44,10 @@ export const Post = ({ post, modify }: { post: PostType, modify: boolean }) => {
                             <Pencil className="w-4 h-4" />
                         </button>
                         {user?.is_admin && (
-                            <button className="w-fit h-fit bg-red-500 text-primary px-2 py-2 rounded-lg hover:bg-red-500/80 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
+                            <button
+                                className="w-fit h-fit bg-red-500 text-primary px-2 py-2 rounded-lg hover:bg-red-500/80 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+                                onClick={() => setShowDeleteModal(true)}
+                            >
                                 <Trash className="w-4 h-4" />
                             </button>
                         )}
@@ -36,6 +55,14 @@ export const Post = ({ post, modify }: { post: PostType, modify: boolean }) => {
                 )}
             </div>
             <p className="text-lg">{post.content}</p>
+            {showDeleteModal && (
+                <DeleteModal
+                    message="Are you sure you want to delete this post?"
+                    isDeleting={isDeleting}
+                    onClose={() => setShowDeleteModal(false)}
+                    onDelete={handleDeletePost}
+                />
+            )}
         </div>
     )
 }

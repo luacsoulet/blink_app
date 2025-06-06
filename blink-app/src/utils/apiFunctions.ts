@@ -118,6 +118,23 @@ export const deleteUser = async (id: string, token: string) => {
     }
 }
 
+export const createPost = async (content: string, token: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/posts`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content })
+        });
+        return response.json();
+    } catch (error) {
+        console.error('Error creating post:', error);
+        return null;
+    }
+}
+
 export const deletePost = async (id: string, token: string) => {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/posts/${id}`, {
