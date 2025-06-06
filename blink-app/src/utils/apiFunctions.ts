@@ -103,6 +103,23 @@ export const getUserPosts = async (id: string) => {
     }
 }
 
+export const modifyUser = async (id: string, username: string, email: string, description: string, token: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/users/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, description })
+        });
+        return response.json();
+    } catch (error) {
+        console.error('Error modifying user:', error);
+        return null;
+    }
+}
+
 export const deleteUser = async (id: string, token: string) => {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/users/${id}`, {
@@ -131,6 +148,23 @@ export const createPost = async (content: string, token: string) => {
         return response.json();
     } catch (error) {
         console.error('Error creating post:', error);
+        return null;
+    }
+}
+
+export const modifyPost = async (id: string, content: string, token: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/posts/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content })
+        });
+        return response.json();
+    } catch (error) {
+        console.error('Error modifying post:', error);
         return null;
     }
 }
