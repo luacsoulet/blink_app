@@ -19,6 +19,12 @@ export const login = async (email: string, password: string) => {
             },
             body: JSON.stringify(body),
         });
+
+        if (!response.ok) {
+            console.error('Login failed:', response.status);
+            return null;
+        }
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -37,8 +43,12 @@ export const register = async (username: string, email: string, password: string
             },
             body: JSON.stringify(body),
         });
-        const data = await response.json();
-        return data;
+
+        if (response.ok) {
+            return await login(email, password);
+        }
+
+        return null;
     } catch (error) {
         console.error('Error registering:', error);
         return null;
@@ -71,6 +81,17 @@ export const getUser = async (id: string) => {
     }
 }
 
+export const getUsers = async () => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/users`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        return null;
+    }
+}
+
 export const getUserPosts = async (id: string) => {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/users/${id}/posts`);
@@ -79,5 +100,35 @@ export const getUserPosts = async (id: string) => {
     } catch (error) {
         console.error('Error fetching user posts:', error);
         return null;
+    }
+}
+
+export const deleteUser = async (id: string, token: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/users/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.status === 200;
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        return false;
+    }
+}
+
+export const deletePost = async (id: string, token: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/posts/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.status === 200;
+    } catch (error) {
+        console.error('Error deleting post:', error);
+        return false;
     }
 }
