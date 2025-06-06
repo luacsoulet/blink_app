@@ -59,7 +59,7 @@ export const UserBanner = ({ user, authStore, setUser }: { user: User, authStore
                 <div className="flex flex-row justify-between">
                     <div className="flex flex-col gap-2 p-5">
                         <h1 className="text-2xl font-bold">{user?.username || "No username"}</h1>
-                        <p>{user?.description || "No description"}</p>
+                        <p className="whitespace-pre-line">{user?.description || "No description"}</p>
                         <p>{dayjs(user?.created_at).format("DD/MM/YYYY") || "No date"}</p>
                     </div>
                     <div className="flex flex-col items-center p-5 gap-2">

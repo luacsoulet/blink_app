@@ -74,7 +74,7 @@ export const Post = ({ post, modify, setPosts, posts }: { post: PostType, modify
                     </div>
                 )}
             </div>
-            <p className="text-lg">{post.content}</p>
+            <p className="text-lg whitespace-pre-line">{post.content}</p>
             {showDeleteModal && (
                 <DeleteModal
                     message="Are you sure you want to delete this post?"
