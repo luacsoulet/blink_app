@@ -8,7 +8,7 @@ export const PostsGallery = ({ posts, user, authStore, setPosts }: {
     setPosts: (posts: PostType[]) => void
 }) => {
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
             {posts.map((post: PostType) => (
                 <Post key={post.id} post={post} modify={user?.id === authStore.user?.id} setPosts={setPosts} posts={posts} />
             ))}
