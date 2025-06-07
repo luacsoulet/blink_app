@@ -1,5 +1,6 @@
 "use client"
 import { CircleUserRound, Pencil, Trash } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 import { PostType } from "@/utils/types";
 import { useAuthStore } from '@/store/AuthStore';
@@ -54,7 +55,9 @@ export const Post = ({ post, modify, setPosts, posts }: { post: PostType, modify
                 <div className="flex items-center w-full gap-2">
                     <div className="flex gap-2 items-center">
                         <CircleUserRound className="w-8 h-8" />
-                        <p className='text-lg'>{post.username}</p>
+                        <Link href={`/profile/${post.user_id}`} className='text-lg hover:underline'>
+                            {post.username}
+                        </Link>
                     </div>
                     <p className='text-xs text-secondary/50'>{formatDate(post.created_at)}</p>
                 </div>
