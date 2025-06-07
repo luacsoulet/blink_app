@@ -51,7 +51,7 @@ export const UserBanner = ({ user, authStore, setUser }: { user: User, authStore
 
     return (
         <>
-            <div className="flex flex-col w-1/2 min-h-[200px] gap-4 border-2 border-quinary rounded-2xl overflow-hidden">
+            <div className="flex flex-col w-3/4 min-h-[200px] gap-4 border-2 border-quinary rounded-2xl overflow-hidden">
                 <div className="relative h-[120px]">
                     <div className="bg-secondary/70 w-full h-full"></div>
                     <span className="absolute top-5 left-5 bg-secondary w-[120px] h-[120px] rounded-lg"></span>

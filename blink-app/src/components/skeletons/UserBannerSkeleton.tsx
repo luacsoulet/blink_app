@@ -1,5 +1,5 @@
 export const UserBannerSkeleton = () => (
-    <div className="flex flex-col w-1/2 gap-4 border-2 border-quinary rounded-2xl overflow-hidden animate-pulse">
+    <div className="flex flex-col w-3/4 gap-4 border-2 border-quinary rounded-2xl overflow-hidden animate-pulse">
         <div className="relative">
             <div className="bg-quaternary w-full h-[120px]"></div>
             <span className="absolute top-5 left-5 bg-quaternary w-[120px] h-[120px] rounded-lg"></span>

@@ -45,7 +45,7 @@ export default function ProfilePage() {
     return (
         <div className="flex flex-col items-center min-h-screen py-40 gap-10">
             {isLoading ? <UserBannerSkeleton /> : user && <UserBanner user={user} authStore={authStore} setUser={setUser} />}
-            <div className="flex flex-col w-1/3 gap-4">
+            <div className="flex flex-col w-2/3 gap-4">
                 {isLoading ? (
                     user?.id === authStore.user?.id && <PostCreatorSkeleton />
                 ) : (
