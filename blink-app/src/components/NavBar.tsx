@@ -3,10 +3,28 @@ import Link from "next/link"
 import { useAuthStore } from "@/store/AuthStore"
 import { CircleUserRound } from "lucide-react";
 import "@/styles/navBar.scss";
+import { useEffect, useCallback } from "react";
+import { verifyToken } from "@/utils/apiFunctions";
 
 export const NavBar = () => {
+    const { user, isAuthenticated, token, logout } = useAuthStore();
 
-    const { user, isAuthenticated, logout } = useAuthStore();
+    const checkToken = useCallback(async () => {
+        if (token) {
+            const isValid = await verifyToken(token);
+            if (!isValid) {
+                logout();
+            }
+        }
+    }, [token, logout]);
+
+    useEffect(() => {
+        const interval = setInterval(checkToken, 15 * 60 * 1000);
+        checkToken();
+
+        return () => clearInterval(interval);
+    }, [checkToken]);
+
     return (
         <div className="navbar">
             <div>

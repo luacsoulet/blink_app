@@ -57,7 +57,7 @@ export const register = async (username: string, email: string, password: string
 
 export const verifyToken = async (token: string) => {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/auth/verify`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/auth/verify-token`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
