@@ -25,7 +25,7 @@ export const UserCard = ({ user }: { user: User | null }) => {
             {user ? (
                 <Link href={`/profile/${user?.id}`} className="bg-action text-primary p-2 text-center rounded-md w-fit py-1 px-4 hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300">View Profile</Link>
             ) : (
-                <Link href={`/login`} className="bg-action text-primary p-2 text-center rounded-md w-fit py-1 px-4 hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300">Login</Link>
+                <Link href={`/auth`} className="bg-action text-primary p-2 text-center rounded-md w-fit py-1 px-4 hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300">Login</Link>
             )}
         </div>
     )

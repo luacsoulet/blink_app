@@ -53,7 +53,7 @@ export default function Home() {
             :
             <UserCard user={null} />}
       </div>
-      <div className="flex flex-col items-center justify-center gap-4 w-1/3 md:w-1/2 sm:w-1/2 xs:w-1/2">
+      <div className="flex w-full flex-col m-4 items-center justify-center gap-4 w-1/3 md:w-1/2 sm:w-1/2 xs:w-1/2">
         {user ? (
           isLoading ?
             <PostCreatorSkeleton />
@@ -71,7 +71,7 @@ export default function Home() {
             (
               <div className="flex items-center justify-center gap-4 bg-secondary/10 border border-quinary/70 h-fit min-w-1/3 w-full max-w-[400px] py-2 px-4 rounded-lg transition-all duration-300">
                 <h1 className="text-xl font-bold">Login to create posts</h1>
-                <Link href="/login" className="bg-action text-primary p-2 text-center rounded-md w-fit py-1 px-4 hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300">Login</Link>
+                <Link href="/auth" className="bg-action text-primary p-2 text-center rounded-md w-fit py-1 px-4 hover:bg-action/80 hover:scale-105 active:scale-95 transition-all duration-300">Login</Link>
               </div>
             )
         )}
@@ -83,7 +83,7 @@ export default function Home() {
           )
         }
       </div>
-      <div className="flex flex-col items-center justify-center gap-4 w-1/3 md:hidden sm:hidden xs:hidden"></div>
+      <div className="hidden flex-col items-center justify-center gap-4 w-1/3 sm:flex xs:hidden"></div>
     </div>
   )
 }
