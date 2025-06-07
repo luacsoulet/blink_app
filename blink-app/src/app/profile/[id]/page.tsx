@@ -54,7 +54,7 @@ export default function ProfilePage() {
                 {isLoading ? (
                     <PostsGallerySkeleton />
                 ) : (
-                    <PostsGallery posts={posts} user={user!} authStore={authStore} setPosts={setPosts} />
+                    <PostsGallery posts={posts} user={user!} authStore={authStore} setPosts={setPosts} allowModify={true} />
                 )}
             </div>
         </div>

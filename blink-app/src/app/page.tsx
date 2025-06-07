@@ -79,7 +79,7 @@ export default function Home() {
           isLoading ? (
             <PostsGallerySkeleton />
           ) : (
-            <PostsGallery posts={posts} user={defaultUser} authStore={authStore} setPosts={setPosts} />
+            <PostsGallery posts={posts} user={defaultUser} authStore={authStore} setPosts={setPosts} allowModify={false} />
           )
         }
       </div>
