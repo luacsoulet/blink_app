@@ -10,7 +10,6 @@ const ProfileContent = dynamic(() => import('@/components/ProfileContent'), {
 
 export default function ProfilePage() {
     return (
-                        <PostsGallerySkeleton />
         <div className="flex flex-col items-center min-h-screen py-40">
             <ProfileContent />
         </div>
