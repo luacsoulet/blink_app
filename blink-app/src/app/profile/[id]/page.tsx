@@ -1,5 +1,26 @@
 "use client"
 
+import { Suspense } from "react";
+import { UserBannerSkeleton } from "@/components/skeletons/UserBannerSkeleton";
+import { PostsGallerySkeleton } from "@/components/skeletons/PostsGallerySkeleton";
+
+export default function ProfilePage() {
+    return (
+        <div className="flex flex-col items-center min-h-screen py-40 gap-10">
+            <Suspense fallback={
+                <>
+                    <UserBannerSkeleton />
+                    <div className="flex flex-col w-2/3 gap-4">
+                        <PostsGallerySkeleton />
+                    </div>
+                </>
+            }>
+                <ProfileContent />
+            </Suspense>
+        </div>
+    );
+}
+
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation"
 import { getUser, getUserPosts } from "@/utils/apiFunctions";
@@ -8,11 +29,9 @@ import { useAuthStore } from "@/store/AuthStore";
 import { UserBanner } from "@/components/UserBanner";
 import { PostsGallery } from "@/components/PostsGallery";
 import { PostCreator } from "@/components/PostCreator";
-import { PostsGallerySkeleton } from "@/components/skeletons/PostsGallerySkeleton";
-import { UserBannerSkeleton } from "@/components/skeletons/UserBannerSkeleton";
 import { PostCreatorSkeleton } from "@/components/skeletons/PostCreatorSkeleton";
 
-export default function ProfilePage() {
+function ProfileContent() {
     const { id } = useParams();
     const authStore = useAuthStore();
     const [posts, setPosts] = useState<PostType[]>([]);
@@ -43,7 +62,7 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="flex flex-col items-center min-h-screen py-40 gap-10">
+        <>
             {isLoading ? <UserBannerSkeleton /> : user && <UserBanner user={user} authStore={authStore} setUser={setUser} />}
             <div className="flex flex-col w-2/3 gap-4">
                 {isLoading ? (
@@ -57,6 +76,6 @@ export default function ProfilePage() {
                     <PostsGallery posts={posts} user={user!} authStore={authStore} setPosts={setPosts} allowModify={true} />
                 )}
             </div>
-        </div>
-    )
+        </>
+    );
 }
