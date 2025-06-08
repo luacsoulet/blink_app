@@ -183,3 +183,14 @@ export const deletePost = async (id: string, token: string) => {
         return false;
     }
 }
+
+export const searchUsers = async (username: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/users/search?username=${encodeURIComponent(username)}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error searching users:', error);
+        return [];
+    }
+}
