@@ -40,7 +40,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen bg-primary text-secondary gap-4">
+    <div className="flex items-start justify-center h-screen bg-primary text-secondary gap-4 mt-50 p-4">
       <div className="hidden gap-4 p-4 xl:w-1/3 md:w-1/4 lg:w-1/3 sm:flex ">
         {user ?
           isLoading ?
@@ -83,7 +83,7 @@ export default function Home() {
           )
         }
       </div>
-      <div className="hidden flex-col items-center justify-center gap-4 w-1/3 sm:flex xs:hidden"></div>
+      <div className="hidden flex-col items-center justify-center gap-4 w-1/3 md:flex xs:hidden"></div>
     </div>
   )
 }
