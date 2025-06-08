@@ -1,13 +1,25 @@
 "use client";
 
+import { Suspense } from "react";
+import { SearchResultsSkeleton } from "@/components/skeletons/SearchResultsSkeleton";
+
+export default function ResultsPage() {
+    return (
+        <div className="flex flex-col items-center min-h-screen py-40">
+            <Suspense fallback={<SearchResultsSkeleton />}>
+                <ResultsContent />
+            </Suspense>
+        </div>
+    );
+}
+
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { searchUsers } from "@/utils/apiFunctions";
 import { User } from "@/utils/types";
 import { SearchResults } from "@/components/SearchResults";
-import { SearchResultsSkeleton } from "@/components/skeletons/SearchResultsSkeleton";
 
-export default function ResultsPage() {
+function ResultsContent() {
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const searchParams = useSearchParams();
@@ -29,7 +41,7 @@ export default function ResultsPage() {
     }, [query]);
 
     return (
-        <div className="flex flex-col items-center min-h-screen py-40">
+        <>
             <h1 className="text-2xl font-bold mb-8">
                 {isLoading ? (
                     "Searching..."
@@ -38,6 +50,6 @@ export default function ResultsPage() {
                 )}
             </h1>
             {isLoading ? <SearchResultsSkeleton /> : <SearchResults users={users} />}
-        </div>
+        </>
     );
 } 
