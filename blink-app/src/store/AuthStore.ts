@@ -15,11 +15,12 @@ interface AuthState {
     login: (response: LoginResponse) => void;
     logout: () => void;
     setLoading: (loading: boolean) => void;
+    updateUser: (updatedUser: Partial<User>) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
     persist(
-        (set) => ({
+        (set, get) => ({
             user: null,
             token: null,
             isLoading: false,
@@ -30,7 +31,6 @@ export const useAuthStore = create<AuthState>()(
                     ...response.user,
                     is_admin: Boolean(response?.user?.is_admin ?? false)
                 };
-                console.log("Normalized user:", normalizedUser);
                 set({
                     user: normalizedUser,
                     token: response.token,
@@ -49,7 +49,18 @@ export const useAuthStore = create<AuthState>()(
             setLoading: (loading: boolean) =>
                 set({
                     isLoading: loading
-                })
+                }),
+            updateUser: (updatedUser: Partial<User>) => {
+                const currentUser = get().user;
+                if (!currentUser) return;
+
+                set({
+                    user: {
+                        ...currentUser,
+                        ...updatedUser
+                    }
+                });
+            }
         }),
         {
             name: 'auth-storage',
