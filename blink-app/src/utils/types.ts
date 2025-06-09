@@ -28,4 +28,5 @@ export interface AuthStoreType {
     login: (response: LoginResponse) => void;
     logout: () => void;
     setLoading: (loading: boolean) => void;
+    updateUser: (updatedUser: Partial<User>) => void;
 }
