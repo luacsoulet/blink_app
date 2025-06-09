@@ -16,15 +16,12 @@ export default function Home() {
   const { user } = authStore;
   const [posts, setPosts] = useState<PostType[]>([]);
   const [newPost, setNewPost] = useState<string>("");
-  const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
       const posts = await getPosts();
-      const users = await getUsers();
       setPosts(posts);
-      setUsers(users);
       setIsLoading(false);
     }
     fetchPosts();
