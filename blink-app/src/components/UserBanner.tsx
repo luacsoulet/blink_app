@@ -28,6 +28,7 @@ export const UserBanner = ({ user, authStore, setUser }: { user: User, authStore
         setIsDeleting(true);
         const success = await deleteUser(user.id.toString(), token);
         if (success) {
+            authStore.logout();
             router.push('/');
         }
         setIsDeleting(false);
@@ -42,7 +43,21 @@ export const UserBanner = ({ user, authStore, setUser }: { user: User, authStore
         setIsModifying(true);
         const success = await modifyUser(user.id.toString(), modifiedUsername, modifiedEmail, modifiedDescription || "", token);
         if (success) {
-            setUser({ ...user, username: success.username, email: success.email, description: success.description || "" });
+            const updatedUserData = {
+                ...user,
+                username: success.username,
+                email: success.email,
+                description: success.description || ""
+            };
+            setUser(updatedUserData);
+
+            if (user.id === authStore.user?.id) {
+                authStore.updateUser({
+                    username: success.username,
+                    email: success.email,
+                    description: success.description || ""
+                });
+            }
         }
 
         setIsModifying(false);
